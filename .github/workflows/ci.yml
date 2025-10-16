@@ -31,7 +31,7 @@ jobs:
           terraform_version: ${{ env.TOOL_VERSION_TERRAFORM }}
 
       - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@v4
+        uses: terraform-linters/setup-tflint@v6
         with:
           tflint_version: ${{ env.TOOL_VERSION_TFLINT }}
 
