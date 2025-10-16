@@ -36,7 +36,6 @@ variable "prefix" {
   }
 }
 
-
 variable "roundtrip_digest" {
   type        = string
   description = "Token used by the Stacklet Platform to detect mismatch between customerConfig and accessConfig."

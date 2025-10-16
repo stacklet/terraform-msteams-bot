@@ -1,6 +1,6 @@
 # Azure AD context information
 output "tenant_id" {
-  description = "Azure AD tenant ID"
+  description = "Your Azure AD tenant ID"
   value       = data.azuread_client_config.current.tenant_id
 }
 
@@ -10,7 +10,7 @@ output "client_id" {
 }
 
 output "roundtrip_digest" {
-  description = "Roundtrip digest for configuration validation"
+  description = "Configuration validation token"
   value       = var.roundtrip_digest
 }
 

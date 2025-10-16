@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-tf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set tool versions
+        uses: wistia/parse-tool-versions@v2.1.1
+        with:
+          prefix: TOOL_VERSION_
+
+      - name: Setup Just
+        uses: extractions/setup-just@v3
+        with:
+          just-version: ${{ env.TOOL_VERSION_JUST }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TOOL_VERSION_TERRAFORM }}
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: ${{ env.TOOL_VERSION_TFLINT }}
+
+      - name: Lint Terraform files
+        run: |
+          just lint
+
+  lint-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check documentation
+        uses: terraform-docs/gh-actions@v1.4.1
+        with:
+          fail-on-diff: true
