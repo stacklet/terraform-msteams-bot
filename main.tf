@@ -1,23 +1,21 @@
 # Current Azure AD and subscription context
 data "azuread_client_config" "current" {}
-data "azurerm_client_config" "current" {}
 
 # Microsoft Graph service principal (exists in every tenant)
 data "azuread_service_principal" "msgraph" {
-  client_id = "00000003-0000-0000-c000-000000000000"
+  display_name = "Microsoft Graph"
 }
 
-# Local values
 locals {
   # Microsoft Graph permissions required for Teams bot functionality
-  msgraph_permissions = {
-    "User.Read.All"                                 = "Read users to map from emails to identities."
-    "TeamsAppInstallation.ReadWriteSelfForTeam.All" = "Install/uninstall app for teams."
-    "TeamsAppInstallation.ReadWriteSelfForUser.All" = "Install/uninstall app for users."
-    "Team.ReadBasic.All"                            = "Read teams to allow mapping configuration."
-    "Channel.ReadBasic.All"                         = "Read teams to allow mapping configuration."
-    "AppCatalog.Read.All"                           = "To discover uploaded Teams app identity."
-  }
+  msgraph_permissions = toset([
+    "User.Read.All",                                 # Read users to map from emails to identities
+    "TeamsAppInstallation.ReadWriteSelfForTeam.All", # Install/uninstall app for teams
+    "TeamsAppInstallation.ReadWriteSelfForUser.All", # Install/uninstall app for users.
+    "Team.ReadBasic.All",                            # Read teams to allow mapping configuration
+    "Channel.ReadBasic.All",                         # Read teams to allow mapping configuration
+    "AppCatalog.Read.All",                           # To discover uploaded Teams app identity
+  ])
 }
 
 # Random string for unique bot service name
@@ -48,7 +46,6 @@ resource "azuread_application" "teams_bot" {
     dynamic "resource_access" {
       for_each = local.msgraph_permissions
       content {
-        # Comment: resource_access.value
         id   = data.azuread_service_principal.msgraph.app_role_ids[resource_access.key]
         type = "Role"
       }

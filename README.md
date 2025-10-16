@@ -59,17 +59,6 @@ The module automatically grants the following Microsoft Graph permissions requir
 
 Admin consent is automatically granted during deployment (no manual step required).
 
-## Outputs
-
-After successful deployment, you'll see these outputs:
-
-| Name             | Description                                     |
-|------------------|-------------------------------------------------|
-| tenant_id        | Your Azure AD tenant ID                         |
-| client_id        | Teams bot application/client ID                 |
-| roundtrip_digest | Configuration validation token                  |
-| access_blob      | **Copy this value to provide back to Stacklet** |
-
 ## Security
 
 - **Passwordless authentication**: Uses federated identity credentials with Stacklet's platform
@@ -107,3 +96,62 @@ terraform destroy
 ```
 
 This will delete the resource group and all contained resources, including the Azure AD application and service principal.
+
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+| <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) | ~> 2.47 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 2.53.1 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.7.2 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [azuread_app_role_assignment.msgraph_permissions](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/app_role_assignment) | resource |
+| [azuread_application.teams_bot](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application) | resource |
+| [azuread_application_federated_identity_credential.oidc_provider](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_federated_identity_credential) | resource |
+| [azuread_service_principal.teams_bot](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal) | resource |
+| [azurerm_bot_channel_ms_teams.teams_channel](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/bot_channel_ms_teams) | resource |
+| [azurerm_bot_service_azure_bot.teams_bot](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/bot_service_azure_bot) | resource |
+| [azurerm_resource_group.teams_bot](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
+| [random_string.bot_suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) | resource |
+| [azuread_client_config.current](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/client_config) | data source |
+| [azuread_service_principal.msgraph](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/service_principal) | data source |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_bot_endpoint"></a> [bot\_endpoint](#input\_bot\_endpoint) | Bot webhook endpoint URL | `string` | n/a | yes |
+| <a name="input_oidc_client"></a> [oidc\_client](#input\_oidc\_client) | OIDC client ID | `string` | n/a | yes |
+| <a name="input_oidc_issuer"></a> [oidc\_issuer](#input\_oidc\_issuer) | OIDC issuer URL | `string` | n/a | yes |
+| <a name="input_prefix"></a> [prefix](#input\_prefix) | Prefix for all resource names (keep short to allow room for customer prefixes) | `string` | n/a | yes |
+| <a name="input_roundtrip_digest"></a> [roundtrip\_digest](#input\_roundtrip\_digest) | Token used by the Stacklet Platform to detect mismatch between customerConfig and accessConfig. | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to all Azure resources | `map(string)` | `{}` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_access_blob"></a> [access\_blob](#output\_access\_blob) | Configuration for Stacklet platform - copy this value to Stacklet Teams configuration |
+| <a name="output_client_id"></a> [client\_id](#output\_client\_id) | Teams bot application/client ID |
+| <a name="output_roundtrip_digest"></a> [roundtrip\_digest](#output\_roundtrip\_digest) | Configuration validation token |
+| <a name="output_tenant_id"></a> [tenant\_id](#output\_tenant\_id) | Your Azure AD tenant ID |
+<!-- END_TF_DOCS -->
