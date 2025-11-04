@@ -33,11 +33,6 @@ az login
 - **User Access Administrator** + **Contributor** roles on the target subscription
 - Or **Owner** role (combines both above)
 
-**Resource Provider:**
-- `Microsoft.BotService` must be registered in your subscription:
-  ```bash
-  az provider register --namespace Microsoft.BotService
-  ```
 
 ## What This Module Creates
 
@@ -73,12 +68,13 @@ Admin consent is automatically granted during deployment (no manual step require
 - Confirm you have **User Access Administrator** + **Contributor** (or **Owner**) roles in Azure
 - Check that you're authenticated with `az login`
 
-### Resource Provider Registration
-If you see errors about `Microsoft.BotService`:
+### Resource Provider Registration Issues
+If you encounter errors about `Microsoft.BotService` provider registration taking too long or failing, this may be an issue with the AzureRM Terraform provider which can be remedied with:
 ```bash
 az provider register --namespace Microsoft.BotService
 ```
-Wait for registration to complete before retrying.
+Wait for registration to complete, then retry `terraform apply`.
+
 
 ### Need Help?
 Contact your **Stacklet Customer Success team** for assistance with:
