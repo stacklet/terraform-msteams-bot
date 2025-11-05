@@ -13,27 +13,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Set tool versions
-        uses: wistia/parse-tool-versions@v2.1.1
+        uses: wistia/parse-tool-versions@32f568a4ffd4bfa7720ebf93f171597d1ebc979a # v2.1.1
         with:
-          prefix: TOOL_VERSION_
+          postfix: _TOOL_VERSION
 
       - name: Setup Just
-        uses: extractions/setup-just@v3
+        uses: extractions/setup-crate@4993624604c307fbca528d28a3c8b60fa5ecc859 # v1.4.0
         with:
-          just-version: ${{ env.TOOL_VERSION_JUST }}
+          repo: casey/just
+          version: ${{ env.JUST_TOOL_VERSION }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
-          terraform_version: ${{ env.TOOL_VERSION_TERRAFORM }}
+          terraform_version: ${{ env.TERRAFORM_TOOL_VERSION }}
 
       - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@v4
+        uses: terraform-linters/setup-tflint@4cb9feea73331a35b422df102992a03a44a3bb33 # v6.2.1
         with:
-          tflint_version: ${{ env.TOOL_VERSION_TFLINT }}
+          tflint_version: ${{ env.TFLINT_TOOL_VERSION }}
 
       - name: Lint Terraform files
         run: |
@@ -43,9 +44,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Check documentation
-        uses: terraform-docs/gh-actions@v1.4.1
+        uses: terraform-docs/gh-actions@6de6da0cefcc6b4b7a5cbea4d79d97060733093c # v1.4.1
         with:
           fail-on-diff: true
