@@ -1,0 +1,40 @@
+version: 3
+automerge: true
+delete_source_branch_on_merge: true
+parallel_plan: true
+parallel_apply: false
+
+projects:
+  - name: dev
+    workflow: dev
+    terraform_version: v1.11.3
+    dir: .
+    autoplan:
+      when_modified:
+        - "**/*.tf*"
+        - ".terraform.lock.hcl"
+        - "atlantis/dev/**"
+    apply_requirements:
+      - approved
+      - mergeable
+
+workflows:
+  dev:
+    plan:
+      steps:
+        - env:  # to avoid "text file busy" error when downloading providers
+            name: TF_PLUGIN_CACHE_MAY_BREAK_DEPENDENCY_LOCK_FILE
+            value: "true"
+        - run: |
+            cp -a atlantis/dev/* .
+        - init
+        - plan
+
+    apply:
+      steps:
+        - env:  # to avoid "text file busy" error when downloading providers
+            name: TF_PLUGIN_CACHE_MAY_BREAK_DEPENDENCY_LOCK_FILE
+            value: "true"
+        - run: |
+            cp -a atlantis/dev/* .
+        - apply
