@@ -23,6 +23,14 @@ You must be authenticated with the Azure CLI with sufficient permissions:
 az login
 ```
 
+If using the module directly (not as a `module` a wider setup), adding a provider declaration is also required:
+
+```terraform
+provider "azurerm" {
+  features {}
+}
+```
+
 ### Required Azure Permissions
 
 **Azure AD (Microsoft Entra ID):**
