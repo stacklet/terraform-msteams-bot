@@ -5,9 +5,6 @@
 *.tfstate
 *.tfstate.*
 
-# Terraform files to not ignore
-!.terraform.lock.hcl
-
 # Variable files
 *.tfvars
 *.tfvars.json
