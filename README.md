@@ -2,36 +2,9 @@
 
 This Terraform module creates the Azure infrastructure required for Stacklet's Teams integration, including an Azure AD application with appropriate Microsoft Graph permissions and an Azure Bot Service configured for Teams.
 
-## Quick Start
-
-1. **Get configuration from Stacklet**: Download the `settings.auto.tfvars.json` file from Stacklet with your specific configuration values.
-
-2. **Deploy the module**:
-   ```bash
-   terraform init
-   terraform apply
-   ```
-
-3. **Copy the output**: After successful deployment, copy the `access_blob` output value and paste it back into the Stacklet UI.
-
 ## Prerequisites
 
-### Azure CLI Authentication
-You must be authenticated with the Azure CLI with sufficient permissions:
-
-```bash
-az login
-```
-
-If using the module directly (not as a `module` a wider setup), adding a provider declaration is also required:
-
-```terraform
-provider "azurerm" {
-  features {}
-}
-```
-
-### Required Azure Permissions
+The identity which deploys this infrastructure will require permissions for:
 
 **Azure AD (Microsoft Entra ID):**
 - **Application Administrator** role (recommended)
@@ -91,16 +64,6 @@ Contact your **Stacklet Customer Success team** for assistance with:
 - Integration setup
 - Any other questions about your Stacklet Teams integration
 
-## Clean Up
-
-To remove all resources created by this module:
-
-```bash
-terraform destroy
-```
-
-This will delete the resource group and all contained resources, including the Azure AD application and service principal.
-
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -130,7 +93,7 @@ No modules.
 |------|------|
 | [azuread_app_role_assignment.msgraph_permissions](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/app_role_assignment) | resource |
 | [azuread_application.teams_bot](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application) | resource |
-| [azuread_application_federated_identity_credential.oidc_provider](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_federated_identity_credential) | resource |
+| [azuread_application_federated_identity_credential.aws_wif](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_federated_identity_credential) | resource |
 | [azuread_service_principal.teams_bot](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal) | resource |
 | [azurerm_bot_channel_ms_teams.teams_channel](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/bot_channel_ms_teams) | resource |
 | [azurerm_bot_service_azure_bot.teams_bot](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/bot_service_azure_bot) | resource |
@@ -144,11 +107,11 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_bot_endpoint"></a> [bot\_endpoint](#input\_bot\_endpoint) | Bot webhook endpoint URL | `string` | n/a | yes |
-| <a name="input_oidc_client"></a> [oidc\_client](#input\_oidc\_client) | OIDC client ID | `string` | n/a | yes |
-| <a name="input_oidc_issuer"></a> [oidc\_issuer](#input\_oidc\_issuer) | OIDC issuer URL | `string` | n/a | yes |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | Prefix for all resource names (keep short to allow room for customer prefixes) | `string` | n/a | yes |
 | <a name="input_roundtrip_digest"></a> [roundtrip\_digest](#input\_roundtrip\_digest) | Token used by the Stacklet Platform to detect mismatch between customerConfig and accessConfig. | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to apply to all Azure resources | `map(string)` | `{}` | no |
+| <a name="input_trust_role_arn"></a> [trust\_role\_arn](#input\_trust\_role\_arn) | AWS IAM role ARN that will generate WIF tokens | `string` | n/a | yes |
+| <a name="input_wif_issuer_url"></a> [wif\_issuer\_url](#input\_wif\_issuer\_url) | AWS outbound identity federation issuer URL | `string` | n/a | yes |
 
 ## Outputs
 

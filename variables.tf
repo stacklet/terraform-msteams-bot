@@ -1,19 +1,19 @@
 # Required inputs from Stacklet
-variable "oidc_issuer" {
-  description = "OIDC issuer URL"
+variable "wif_issuer_url" {
+  description = "AWS outbound identity federation issuer URL"
   type        = string
   validation {
-    condition     = can(regex("^https://", var.oidc_issuer))
-    error_message = "The oidc_issuer must be a valid HTTPS URL."
+    condition     = can(regex("^https://", var.wif_issuer_url))
+    error_message = "The wif_issuer_url must be a valid HTTPS URL."
   }
 }
 
-variable "oidc_client" {
-  description = "OIDC client ID"
+variable "trust_role_arn" {
+  description = "AWS IAM role ARN that will generate WIF tokens"
   type        = string
   validation {
-    condition     = length(var.oidc_client) > 0
-    error_message = "The oidc_client must not be empty."
+    condition     = can(regex("^arn:", var.trust_role_arn))
+    error_message = "The trust_role_arn must be a valid ARN."
   }
 }
 

@@ -59,16 +59,16 @@ resource "azuread_service_principal" "teams_bot" {
   owners    = [data.azuread_client_config.current.object_id]
 }
 
-# Federated Identity Credential - trusts OIDC provider
-resource "azuread_application_federated_identity_credential" "oidc_provider" {
+# Federated Identity Credential - trusts AWS WIF tokens
+resource "azuread_application_federated_identity_credential" "aws_wif" {
   application_id = azuread_application.teams_bot.id
-  display_name   = "${var.prefix}-oidc"
-  description    = "Trust OIDC M2M tokens"
+  display_name   = "${var.prefix}-aws-wif"
+  description    = "Trust AWS workload identity federation tokens"
 
-  # OIDC provider details
-  issuer    = var.oidc_issuer
-  subject   = var.oidc_client
-  audiences = [var.oidc_client]
+  # AWS WIF details
+  issuer    = var.wif_issuer_url
+  subject   = var.trust_role_arn
+  audiences = [azuread_application.teams_bot.client_id]
 }
 
 # Azure Bot Service
